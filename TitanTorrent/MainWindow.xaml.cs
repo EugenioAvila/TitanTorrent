@@ -1,4 +1,7 @@
 ﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
+
 namespace TitanTorrent
 {
     public partial class MainWindow : MahApps.Metro.Controls.MetroWindow
@@ -55,6 +58,21 @@ namespace TitanTorrent
             }
         }
 
+        private async void Buscar(Herramientas.ClasesCustom.CustomPlataformas _plataforma, Herramientas.ClasesCustom.CustomCategorias _categoria)
+        {
+            try
+            {
+                var _cliente = new HttpClient();
+                var _respuesta = await _cliente.GetByteArrayAsync("https://concen.org/torrents");
+                System.String source = System.Text.Encoding.GetEncoding("utf-8").GetString(_respuesta, 0, _respuesta.Length - 1);
+                source = WebUtility.HtmlDecode(source);
+
+            }
+            catch (System.Exception exc)
+            {
+                throw exc;
+            }
+        }
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
@@ -66,6 +84,8 @@ namespace TitanTorrent
                     System.Windows.MessageBox.Show("Seleccione plataforma y categoria");
                     return;
                 }
+
+                Buscar(_plataformaElegida, _categoriaElegida);
             }
             catch (System.Exception exc)
             {
