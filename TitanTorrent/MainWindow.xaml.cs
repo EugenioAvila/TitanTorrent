@@ -23,7 +23,6 @@ namespace TitanTorrent
 
             cmbPlataformas.DisplayMemberPath = "DESCRIPCION";
             cmbPlataformas.ItemsSource = _plataformas;
-            
         }
 
         public static void InicializaCombos()
@@ -53,6 +52,24 @@ namespace TitanTorrent
             catch (System.Exception exc)
             {
                 throw exc;
+            }
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            try
+            {
+                var _plataformaElegida = (cmbPlataformas.SelectedItem as Herramientas.ClasesCustom.CustomPlataformas);
+                var _categoriaElegida  = (cmbCategorias.SelectedItem as Herramientas.ClasesCustom.CustomCategorias);
+                if (_plataformaElegida is null || _categoriaElegida is null)
+                {
+                    System.Windows.MessageBox.Show("Seleccione plataforma y categoria");
+                    return;
+                }
+            }
+            catch (System.Exception exc)
+            {
+                throw;
             }
         }
     }
