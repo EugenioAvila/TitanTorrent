@@ -30,7 +30,7 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Label Grid.Column="0" Grid.Row="0" Content="Plataforma" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-                <ComboBox Grid.Column="1" Grid.Row="0" Name="cmbPlataformas" Controls:TextBoxHelper.Watermark="SELECCIONE"></ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="0" Name="cmbPlataformas" Controls:TextBoxHelper.Watermark="SELECCIONE" SelectionChanged="cmbPlataformas_SelectionChanged"></ComboBox>
                 <Label Grid.Column="2" Grid.Row="0" Content="Categorias" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                 <ComboBox Grid.Column="3" Grid.Row="0" Name="cmbCategorias" Controls:TextBoxHelper.Watermark="SELECCIONE"></ComboBox>
                 <Button Grid.Column="4" Grid.Row="0" Content="Buscar" Background="OrangeRed" HorizontalAlignment="Center" Width="130"></Button>
