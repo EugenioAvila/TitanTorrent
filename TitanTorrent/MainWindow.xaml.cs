@@ -66,7 +66,15 @@ namespace TitanTorrent
                 var _respuesta = await _cliente.GetByteArrayAsync("https://concen.org/torrents");
                 System.String source = System.Text.Encoding.GetEncoding("utf-8").GetString(_respuesta, 0, _respuesta.Length - 1);
                 source = WebUtility.HtmlDecode(source);
+                var _doc = new HtmlAgilityPack.HtmlDocument();
+                _doc.LoadHtml(source);
+                System.Collections.Generic.List<string> _urls = new System.Collections.Generic.List<string>();
+                foreach (HtmlAgilityPack.HtmlNode _data in _doc.DocumentNode.ChildNodes)
+                    if (_data.ChildNodes.Any())
+                    {
+                        var _cuerpo = _data.ChildNodes.FirstOrDefault(x => x.Name == "body");
 
+                    }
             }
             catch (System.Exception exc)
             {
