@@ -68,13 +68,9 @@ namespace TitanTorrent
                 source = WebUtility.HtmlDecode(source);
                 var _doc = new HtmlAgilityPack.HtmlDocument();
                 _doc.LoadHtml(source);
+                System.Collections.Generic.List<Herramientas.ClasesCustom.CustomContenido> _contenido = new System.Collections.Generic.List<Herramientas.ClasesCustom.CustomContenido>();
                 System.Collections.Generic.List<string> _urls = new System.Collections.Generic.List<string>();
-                foreach (HtmlAgilityPack.HtmlNode _data in _doc.DocumentNode.ChildNodes)
-                    if (_data.ChildNodes.Any())
-                    {
-                        var _cuerpo = _data.ChildNodes.FirstOrDefault(x => x.Name == "body");
-
-                    }
+                var allElementsWithClassFloat = _doc.DocumentNode.SelectNodes("//*[contains(@class,'views-table')]").Descendants("tr").Skip(1).Where(tr => tr.Elements("td").Count() > 1).Select(tr => tr.Elements("td").ToList()).ToList();
             }
             catch (System.Exception exc)
             {
