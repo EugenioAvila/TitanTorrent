@@ -65,20 +65,32 @@ namespace TitanTorrent
             try
             {
                 var _cliente = new HttpClient();
-                var _respuesta = await _cliente.GetByteArrayAsync("https://concen.org/torrents");
-                System.String source = System.Text.Encoding.GetEncoding("utf-8").GetString(_respuesta, 0, _respuesta.Length - 1);
-                source = WebUtility.HtmlDecode(source);
-                var _doc = new HtmlAgilityPack.HtmlDocument();
-                _doc.LoadHtml(source);
+                byte[] _respuesta = new byte[] { };
+                string source = string.Empty;
+                HtmlAgilityPack.HtmlDocument _doc = null;
                 System.Collections.Generic.List<Herramientas.ClasesCustom.CustomContenido> _contenido = new System.Collections.Generic.List<Herramientas.ClasesCustom.CustomContenido>();
                 System.Collections.Generic.List<string> _urls = new System.Collections.Generic.List<string>();
-                var allElementsWithClassFloat = _doc.DocumentNode.SelectNodes("//*[contains(@class,'views-table')]").Descendants("tr").Skip(1).Where(tr => tr.Elements("td").Count() > 1).Select(tr => tr.Elements("td").ToList()).ToList();
+
+                switch (_plataforma.ID)
+                {
+                    case 1:
+                        _respuesta = await _cliente.GetByteArrayAsync("https://concen.org/torrents");
+                        source = System.Text.Encoding.GetEncoding("utf-8").GetString(_respuesta, 0, _respuesta.Length - 1);
+                        source = WebUtility.HtmlDecode(source);
+                        _doc = new HtmlAgilityPack.HtmlDocument();
+                        _doc.LoadHtml(source);
+
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (System.Exception exc)
             {
                 throw exc;
             }
         }
+
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
