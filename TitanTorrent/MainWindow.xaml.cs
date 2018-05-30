@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using HtmlAgilityPack;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 
@@ -67,7 +68,7 @@ namespace TitanTorrent
                 var _cliente = new HttpClient();
                 byte[] _respuesta = new byte[] { };
                 string source = string.Empty;
-                HtmlAgilityPack.HtmlDocument _doc = null;
+                HtmlDocument _doc = null;
                 System.Collections.Generic.List<Herramientas.ClasesCustom.CustomContenido> _contenido = new System.Collections.Generic.List<Herramientas.ClasesCustom.CustomContenido>();
                 System.Collections.Generic.List<string> _urls = new System.Collections.Generic.List<string>();
 
@@ -75,10 +76,25 @@ namespace TitanTorrent
                 {
                     case 1:
                         _respuesta = await _cliente.GetByteArrayAsync("https://concen.org/torrents");
-                        source = System.Text.Encoding.GetEncoding("utf-8").GetString(_respuesta, 0, _respuesta.Length - 1);
-                        source = WebUtility.HtmlDecode(source);
-                        _doc = new HtmlAgilityPack.HtmlDocument();
+                        source = WebUtility.HtmlDecode(System.Text.Encoding.GetEncoding("utf-8").GetString(_respuesta, 0, _respuesta.Length - 1));
+                        _doc = new HtmlDocument();
                         _doc.LoadHtml(source);
+                        int _cantidadP = 1;
+                        var _ultimaPagina = _doc.DocumentNode.SelectNodes("//*[contains(@class,'pager-last last')]");
+                        if (_ultimaPagina != null && _ultimaPagina.Any())
+                            if (_ultimaPagina.FirstOrDefault().ChildNodes != null)
+                                if (_ultimaPagina.FirstOrDefault().ChildNodes.Select(a => a.Attributes.Where(b => b.Name == "href")) != null && _ultimaPagina.FirstOrDefault().ChildNodes.Select(a => a.Attributes.Where(b => b.Name == "href")).Any())
+                                    _cantidadP = _ultimaPagina.FirstOrDefault().ChildNodes.Select(a => a.Attributes.Where(b => b.Name == "href")).FirstOrDefault().Select(a => a.Value) != null ? _ultimaPagina.FirstOrDefault().ChildNodes.Select(a => a.Attributes.Where(b => b.Name == "href")).FirstOrDefault().Select(a => a.Value).Any() ? System.Convert.ToInt32(_ultimaPagina.FirstOrDefault().ChildNodes.Select(a => a.Attributes.Where(b => b.Name == "href")).FirstOrDefault().Select(a => a.Value).FirstOrDefault().ToString().Replace("/torrents?page=", "")) : 1 : 1;
+
+                        foreach (HtmlNode table in _doc.DocumentNode.SelectNodes("//table"))
+                            foreach (var item in table.SelectNodes("tbody"))
+                                if (item.ChildNodes != null && item.ChildNodes.Any(x => x.Name == "tr"))
+                                    foreach (HtmlNode row in item.SelectNodes("tr"))
+                                        if (item.ChildNodes != null && item.ChildNodes.Any(x => x.Name == "td"))
+                                            foreach (HtmlNode cell in row.SelectNodes("td"))
+                                            {
+                                                var a = "cell: " + cell.InnerText;
+                                            }
 
                         break;
                     default:
